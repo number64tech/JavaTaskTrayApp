@@ -1,6 +1,7 @@
 package jp.number64.tasktray;
 
 import java.awt.AWTException;
+import java.awt.SystemTray;
 import java.io.IOException;
 
 import org.slf4j.Logger;
@@ -13,19 +14,30 @@ public class ResidentManager {
         LOGGER.debug("Hello TaskTrayApplication!");
 
         int exitCode = 0;
-        TrayWorker worker = new TrayWorker();
         try {
-            exitCode = worker.doItYourself();
+            // Set TaskTray Icon.
+            TimerTaskTrayWorkerBasic worker = new TimerTaskTrayWorkerBasic();
+            AbstractTimerDrivenTrayObject timerDrivenTrayObject =
+                new TimerDrivenTrayObjectBasic(worker, Thread.currentThread());
+            SystemTray.getSystemTray().add(timerDrivenTrayObject.getPreparedTrayIcon());
+
+            Thread.sleep(20000);
+
         } catch (UnsupportedOperationException e) {
             LOGGER.debug("stacktrace: {}", e);
+            exitCode = 11;
         } catch (IOException e) {
             LOGGER.debug("stacktrace: {}", e);
+            exitCode = 12;
         } catch (AWTException e) {
             LOGGER.debug("stacktrace: {}", e);
+            exitCode = 13;
         } catch (InterruptedException e) {
             LOGGER.debug("stacktrace: {}", e);
+            exitCode = 14;
         }
 
         LOGGER.debug("end TaskTrayApplication EXITCODE:{}", exitCode);
+        System.exit(exitCode);
     }
 }
