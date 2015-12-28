@@ -12,15 +12,20 @@ public class ResidentManager {
     public static void main(String[] args) {
         LOGGER.debug("Hello TaskTrayApplication!");
 
+        int exitCode = 0;
         TrayWorker worker = new TrayWorker();
         try {
-            worker.doItYourself();
+            exitCode = worker.doItYourself();
         } catch (UnsupportedOperationException e) {
             LOGGER.debug("stacktrace: {}", e);
         } catch (IOException e) {
             LOGGER.debug("stacktrace: {}", e);
         } catch (AWTException e) {
             LOGGER.debug("stacktrace: {}", e);
+        } catch (InterruptedException e) {
+            LOGGER.debug("stacktrace: {}", e);
         }
+
+        LOGGER.debug("end TaskTrayApplication EXITCODE:{}", exitCode);
     }
 }

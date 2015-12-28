@@ -12,6 +12,9 @@ public class TrayWorkerTest {
     @Test
     public void case01() {
         LOGGER.debug("case01");
+
+        ResidentManager.main(null);
+
         assertEquals(true, true);
     }
 }

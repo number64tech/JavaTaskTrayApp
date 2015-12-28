@@ -21,15 +21,18 @@ import org.slf4j.LoggerFactory;
 public class TrayWorker {
     private static Logger LOGGER = LoggerFactory.getLogger(TrayWorker.class);
 
-    public void doItYourself() throws IOException, AWTException, UnsupportedOperationException {
+    public int doItYourself() throws IOException, AWTException, UnsupportedOperationException, InterruptedException {
+
+        int exitCode = 0;
+        Timer timer = new Timer();
 
         // タスクトレイアイコン
-        Image image = ImageIO.read(
-                getClass().getResourceAsStream("trayicon.png"));
+        Image image = ImageIO.read(ClassLoader.getSystemResourceAsStream("icon.png"));
         final TrayIcon icon = new TrayIcon(image);
         icon.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                LOGGER.debug("TrayIcon:actionPerformed(ActionEvent e)");
                 icon.displayMessage("アイコンクリック",
                     "アイコンがダブルクリックされました",
                     MessageType.WARNING);
@@ -43,6 +46,7 @@ public class TrayWorker {
         aItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                LOGGER.debug("PopupMenu:actionPerformed(ActionEvent e)");
                 icon.displayMessage("メニューの例",
                         "メニューが選択されました",
                         MessageType.ERROR);
@@ -54,7 +58,8 @@ public class TrayWorker {
         exitItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+                LOGGER.debug("ExitMenu:actionPerformed(ActionEvent e)");
+                timer.cancel();
             }
         });
 
@@ -70,14 +75,16 @@ public class TrayWorker {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                icon.displayMessage("タイマー",
-                        "タイマータスクです。", MessageType.INFO);
+                LOGGER.debug("TimerTask#run()");
+                icon.displayMessage("タイマー", "タイマータスクです。", MessageType.INFO);
             }
         };
 
-        LOGGER.debug("");
+        LOGGER.debug("start timer.");
+        timer.scheduleAtFixedRate(task, 0, 1000 * 10L); // period: 1000msec * 10 = 10sec.
+        Thread.sleep(1000 * 25L);
+        LOGGER.debug("end timer.");
 
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(task, 0, 1 * 60 * 1000); // 1分ごと
+        return exitCode;
     }
 }
