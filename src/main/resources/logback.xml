@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- LOG_DIR : ログ出力ディレクトリ -->
+    <property name="LOG_DIR" value="/log/xxx" />
+
+    <!-- コンソールのログ出力フォーマット -->
+    <property name="CONSOLE_LOG_PATTERN"
+        value="${HOSTNAME:- } ${PID:- } %t %d{yyyy-MM-dd HH:mm:ss.SSS} %-5level - %msg%n" />
+    <!-- ファイルのログ出力フォーマット -->
+    <property name="FILE_LOG_PATTERN"
+        value="${HOSTNAME:- } ${PID:- } %t %d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %class %M %L - %msg%n%ex" />
+
+    <!-- コンソール出力 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="jp.number64.javabatch.logmarker.SuppressRepeatMarkerFilter">
+            <Marker>SuppressRepeat</Marker>
+            <SuppressSeconds>600</SuppressSeconds>
+        </filter>
+        <append>true</append>
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- info.log -->
+    <appender name="INFOLOG" class="ch.qos.logback.core.FileAppender">
+        <append>true</append>
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <file>${LOG_DIR}/info.log</file>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+    </appender>
+
+    <!-- error.log -->
+    <appender name="ERRORLOG" class="ch.qos.logback.core.FileAppender">
+        <filter class="jp.number64.javabatch.logmarker.SuppressRepeatMarkerFilter">
+            <Marker>SuppressRepeat</Marker>
+            <SuppressSeconds>600</SuppressSeconds>
+        </filter>
+        <append>true</append>
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <file>${LOG_DIR}/error.log</file>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+    </appender>
+
+    <!-- 出力対象選択 -->
+    <root level="DEBUG">
+        <appender-ref ref="CONSOLE" />
+        <!-- appender-ref ref="INFOLOG" / -->
+        <!-- appender-ref ref="ERRORLOG" / -->
+    </root>
+
+</configuration>
