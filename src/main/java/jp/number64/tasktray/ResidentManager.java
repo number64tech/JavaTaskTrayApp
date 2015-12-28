@@ -1,5 +1,8 @@
 package jp.number64.tasktray;
 
+import java.awt.AWTException;
+import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,6 +13,14 @@ public class ResidentManager {
         LOGGER.debug("Hello TaskTrayApplication!");
 
         TrayWorker worker = new TrayWorker();
-        worker.doItYourself();
+        try {
+            worker.doItYourself();
+        } catch (UnsupportedOperationException e) {
+            LOGGER.debug("stacktrace: {}", e);
+        } catch (IOException e) {
+            LOGGER.debug("stacktrace: {}", e);
+        } catch (AWTException e) {
+            LOGGER.debug("stacktrace: {}", e);
+        }
     }
 }
