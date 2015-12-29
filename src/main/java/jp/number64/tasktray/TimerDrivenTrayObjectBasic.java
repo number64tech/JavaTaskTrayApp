@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +13,8 @@ import org.slf4j.LoggerFactory;
 public class TimerDrivenTrayObjectBasic extends AbstractTimerDrivenTrayObject {
     private static Logger LOGGER = LoggerFactory.getLogger(TimerDrivenTrayObjectBasic.class);
 
-    public TimerDrivenTrayObjectBasic(TimerTask worker, Thread thread) throws IOException {
-        super(worker, thread);
+    public TimerDrivenTrayObjectBasic(Thread thread) throws IOException {
+        super(thread);
     }
 
     @Override
@@ -68,7 +67,7 @@ public class TimerDrivenTrayObjectBasic extends AbstractTimerDrivenTrayObject {
                 LOGGER.debug("TimerStartAction:actionPerformed(ActionEvent e)");
                 timer.cancel();
                 timer = new Timer();
-                timer.scheduleAtFixedRate(worker, 0, period);
+                timer.scheduleAtFixedRate(new TimerTaskTrayWorkerBasic(TimerDrivenTrayObjectBasic.this), 0, period);
             }
         };
     }

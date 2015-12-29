@@ -16,9 +16,8 @@ public class ResidentManager {
         int exitCode = 0;
         try {
             // Set TaskTray Icon.
-            TimerTaskTrayWorkerBasic worker = new TimerTaskTrayWorkerBasic();
             AbstractTimerDrivenTrayObject timerDrivenTrayObject =
-                new TimerDrivenTrayObjectBasic(worker, Thread.currentThread());
+                new TimerDrivenTrayObjectBasic(Thread.currentThread());
             SystemTray.getSystemTray().add(timerDrivenTrayObject.getPreparedTrayIcon());
 
             Thread.sleep(20000);

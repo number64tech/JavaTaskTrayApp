@@ -6,7 +6,6 @@ import java.awt.TrayIcon;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 
@@ -15,13 +14,11 @@ public abstract class AbstractTimerDrivenTrayObject {
     // subclass only.
     long period = 2000;
     Timer timer;
-    TimerTask worker;
     TrayIcon icon;
     PopupMenu menu;
 
-    public AbstractTimerDrivenTrayObject(TimerTask worker, Thread thread) throws IOException {
+    public AbstractTimerDrivenTrayObject(Thread thread) throws IOException {
         this.timer = new Timer();
-        this.worker = worker;
         this.icon = new TrayIcon(ImageIO.read(ClassLoader.getSystemResourceAsStream(getIconResourceName())));
         this.menu = new PopupMenu();
 
